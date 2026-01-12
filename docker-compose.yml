@@ -1,12 +1,12 @@
+version: '3.8'
+
 services:
   backend:
     build: ./backend
     container_name: spring_api
-    # 서버 재시작 시 자동 실행
     restart: always
     ports:
       - "8080:8080"
-    # 로그 크기 제한 (운영/개발 서버 필수)
     logging:
       driver: "json-file"
       options:
@@ -14,14 +14,19 @@ services:
         max-file: "3"
 
   frontend:
-    build: 
+    build:
       context: ./frontend
-      # 빌드 시점에 환경변수 전달 가능
       args:
-        - BASE_URL=http://your-server-ip:8080
+        # 루트의 .env 파일에 정의된 BASE_URL을 빌드 시점에 주입
+        - BASE_URL=${BASE_URL}
     container_name: flutter_web
     restart: always
     ports:
       - "80:80"
     depends_on:
       - backend
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

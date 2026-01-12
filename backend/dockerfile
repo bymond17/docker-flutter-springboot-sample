@@ -1,22 +1,19 @@
-# 1단계: 빌드 (Gradle 캐시 활용)
+# 1단계: 빌드 단계
 FROM gradle:7.6-jdk17 AS build
 WORKDIR /app
 
-# 의존성 정의 파일만 먼저 복사
+# 의존성 파일만 먼저 복사하여 라이브러리 캐싱
 COPY build.gradle settings.gradle ./
-# 라이브러리만 미리 다운로드 (소스 수정 시 이 단계는 캐시됨)
 RUN gradle build -x test --no-daemon > /dev/null 2>&1 || true
 
-# 실제 소스 복사 및 빌드
+# 소스 복사 및 실제 빌드
 COPY src ./src
 RUN gradle bootJar --no-daemon
 
-# 2단계: 실행 (경량화 및 보안)
+# 2단계: 실행 단계
 FROM amazoncorretto:17-al2023-headless
 WORKDIR /app
-# 빌드 결과물만 복사 (이미지 크기 대폭 감소)
 COPY --from=build /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
-# 컨테이너 실행 시 가용 메모리 최적화 옵션 추가 권장
-ENTRYPOINT ["java", "-Xmx512m", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
