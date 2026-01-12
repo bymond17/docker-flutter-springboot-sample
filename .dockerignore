@@ -1,0 +1,8 @@
+.git
+.idea
+.vscode
+build/
+.dart_tool/
+bin/
+obj/
+*.log
