@@ -28,7 +28,6 @@ class ApiResultWidget extends StatefulWidget {
 
 class _ApiResultWidgetState extends State<ApiResultWidget> {
   String _message = "데이터를 가져오는 중...";
-  final ApiService _apiService = ApiService();
 
   @override
   void initState() {
@@ -37,10 +36,10 @@ class _ApiResultWidgetState extends State<ApiResultWidget> {
   }
 
   void _loadData() async {
-    final result = await _apiService.fetchData();
-    setState(() {
-      _message = result['message'] ?? '데이터 없음';
-    });
+  final result = await ApiService.fetchData(); // 인스턴스 대신 클래스명으로 호출
+  setState(() {
+    _message = result['message'] ?? '데이터 없음';
+  });
   }
 
   @override
