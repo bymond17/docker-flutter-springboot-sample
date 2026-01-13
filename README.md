@@ -16,7 +16,7 @@
 
 1. **Repository Clone**
    ```bash
-   git clone [https://github.com/bymond17/docker-flutter-springboot-sample.git](https://github.com/bymond17/docker-flutter-springboot-sample.git)
+   git clone https://github.com/bymond17/docker-flutter-springboot-sample.git
    cd docker-flutter-springboot-sample
    ```
 
